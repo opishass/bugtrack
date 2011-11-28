@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Bugtrack" basedir="." default="build">
+  
+  <target name="prepare">
+     <mkdir dir="${project.basedir}/build" />
+     <mkdir dir="${project.basedir}/build/logs" />
+     <mkdir dir="${project.basedir}/build/phpdoc" />
+     <mkdir dir="${project.basedir}/build/docblox" />
+     <mkdir dir="${project.basedir}/build/coverage" />
+     <mkdir dir="${project.basedir}/build/code-browser" />
+     <mkdir dir="${project.basedir}/build/pdepend" />
+  </target>
+  
+  <target name="clean">
+    <delete dir="${project.basedir}/build" />
+  </target>
+  
+  <target name="phpunit">
+    <exec dir="${project.basedir}/tests" 
+          executable="/usr/local/zend/bin/phpunit"/>
+  </target>
+  
+  <target name="phpcs" >
+     <exec executable="/usr/local/zend/bin/phpcs" 
+           output="/dev/null" 
+           dir="${project.basedir}">
+	     <arg line="--report=checkstyle
+	                --report-file=${project.basedir}/build/logs/checkstyle.xml
+	                --standard=Zend
+	                ${project.basedir}/application 
+	                ${project.basedir}/library/Ip" />  
+     </exec>   
+  </target> 
+  
+  <target name="phpcb" >
+     <exec executable="/usr/local/zend/bin/phpcb">
+        <arg line="--log ${project.basedir}/build/logs/
+                   --source ${project.basedir}/application
+                   --output ${project.basedir}/build/code-browser"/>
+     </exec>
+  </target>
+  
+  <target name="phpmd" >
+     <exec executable="/usr/local/zend/bin/phpmd">
+        <arg line="${project.basedir}/application xml codesize,unusedcode
+                   --reportfile ${project.basedir}/build/logs/pmd.xml
+                   --suffixes php" />
+     </exec>
+  </target>
+  
+  <target name="phpcpd">
+     <exec executable="/usr/local/zend/bin/phpcpd">
+        <arg line="--min-lines 3
+                   --min-tokens 3
+                   --log-pmd ${project.basedir}/build/logs/pmd-cpd.xml
+                   ${project.basedir}/application"/>
+     </exec>
+  </target>
+  
+  <target name="pdepend">
+    <exec executable="/usr/local/zend/bin/pdepend">
+        <arg line="--jdepend-xml=${project.basedir}/build/logs/jdepend.xml 
+                   --jdepend-chart=${project.basedir}/build/pdepend/dependencies.svg 
+                   --overview-pyramid=${project.basedir}/build/pdepend/overview-pyramid.svg 
+                  ${project.basedir}/application"/>
+    </exec>
+  </target>
+  
+  <target name="phploc">
+    <exec executable="/usr/local/zend/bin/phploc" >
+        <arg line="--log-csv ${project.basedir}/build/logs/phploc.csv 
+                   ${project.basedir}/application"/>
+    </exec>
+  </target>
+  
+  <target name="phpdoc">
+     <exec executable="/usr/local/zend/bin/phpdoc">
+        <arg line="--directory ${project.basedir}/library 
+                   --ignore ${project.basedir}/library/Zend 
+                   --target ${project.basedir}/build/phpdoc" />
+     
+     </exec>
+  </target>
+  
+  <target name="docblox">
+     <exec executable="/usr/local/zend/bin/docblox">
+                <arg line="project:run 
+                   --directory ${project.basedir}/library 
+                   --ignore ${project.basedir}/library/Zend 
+                   --target ${project.basedir}/build/docblox" />
+     </exec>
+  </target>
+  
+  <target name="build" 
+          description="Main build process"
+          depends="clean,prepare,phpunit,phpcs,phpcb,phpmd,phpcpd,pdepend,phploc,phpdoc,docblox">
+    
+  </target>
+  
+
+</project>

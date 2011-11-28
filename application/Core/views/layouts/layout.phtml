@@ -1,0 +1,35 @@
+<?php echo $this->doctype() . PHP_EOL; ?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<?php echo $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=iso-8859-15'); ?>
+	<?php echo $this->navigation()->links(Zend_Registry::get('navigation')).PHP_EOL; ?>
+	<?php echo $this->headLink();?>
+</head>
+<body id="body">
+<div id="top">
+	<div id="top_content">
+		<div id="logo">
+			<h1>Title 1</h1>
+			<h4>Title 4</h4>
+		</div>
+	</div>
+</div>
+<div class="menu">
+	<div class="menu_content">
+		<?php echo $this->navigation()->menu(Zend_Registry::get('navigation'));?>
+	</div>
+</div>
+<div class="breadcrumbs">
+	<a class="first" href="/index">My WebSite</a> &rarr;
+	<?php echo $this->navigation()
+	                    ->breadcrumbs(Zend_Registry::get('navigation'))
+	                    ->setSeparator(' &rarr; ')
+	                    ->setMinDepth(0); ?>
+</div>
+<div id="content">
+	<?php echo $this->layout()->content;?>
+</div>
+<div id="bottom">
+</div>
+</body>
+</html>

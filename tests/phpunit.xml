@@ -1,0 +1,16 @@
+<phunit bootstrap="bootstrap.php" >
+   <testsuite name="bugtrack">
+        <directory>./</directory>
+   </testsuite>
+   
+   <logging>
+      <log type="junit" target="../build/logs/phpunit.xml" />
+      <log type="testdox-html" target="../build/logs/phpunit.html" />
+      <log type="tap" target="../build/logs/phpunit.tap" />
+      <log type="coverage-html" target="../build/coverage"
+           title="Bugtrack Coverage" charset="UTF-8" 
+           yui="true" highlight="true" />
+      <log type="coverage-clover"
+           target="../build/logs/clover.xml" />
+   </logging>
+</phunit>
